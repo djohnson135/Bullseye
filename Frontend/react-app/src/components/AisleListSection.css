@@ -1,0 +1,38 @@
+.aisle-list-wrapper {
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  min-height: calc(100vh - 266px - 80px);
+}
+
+.aisle-list-wrapper-signin {
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.aisle-list-header {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.aisle-list-header > p {
+  font-family: "Mulish", sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.aisle-list-red {
+  color: red;
+}
+
+label {
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 600px) {
+  .aisle-list-header > p {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/background.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/background.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const API_KEY = "57482C072B994B1F8C13F85D48203DB0";
+/**
+ * &lt;p>
+ * For runtime listener prior to this function:
+ * Listener function utilizing chrome.extension api in order to listen in on when the user clicks the generate path button. 
+ * First gets the user's profile if needed
+ * Then checks if it is a message from the React Popup. If so, runs the contenScript on the current tab
+ * Then waits until the contentScript sends data back. Calls getProductData to use RedCircle to obtain more information from the web scraped data.
+ * Finally sends data to database and to lambda to start path generation.
+ * &lt;/p>
+ * 
+ * This function utilizes the RedCircle API with our web-scraped TCIN and store data to obtain the product information for that user. The store informaiton is pulled from our database that contains all Texas stores while everything is pulled from RedCircle.
+ * @param {Array} itemIDs list of user's shopping list id's
+ * @param {String} store_name The user's store that was scraped
+ * @returns {Set} aisles: The user's aisles that they must visit; pulled from RedCircle API
+ * @returns {Array} tcin_data: The user's various data including product id, product name, product image, product price, and product aisle; pulled from RedCircle API
+ * @returns {String} store_loc: The user's store location; pulled from the database  
+ */
+
+const getProductData = async (itemIDs, store_name) => {
+    // implement zip code swapping (if necessary) so orders associated with stores not in our list can be processed
+    store_name = store_name.toLowerCase();
+    store_name = store_name.replace(" ", "-");
+    const store_response = await fetch(`https://api.bullseye.host/store/name/${store_name}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json", 'Accept': 'application/json' },
+    });
+    const store_data = await store_response.json();
+    const store_zipcode = store_data["zipcode"].substring(0, 5);
+
+    const results = await Promise.all(
+        itemIDs.map(async (id) => {
+            const url = `https://api.redcircleapi.com/request?api_key=${API_KEY}&amp;type=product&amp;tcin=${String(id)}&amp;customer_zipcode=${String(store_zipcode)}`
+            // make the http GET request to RedCircle API
+            const res = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json();
+            return data;
+        })
+    ).catch((error) => {
+        // catch and print the error
+        console.log(error);
+    });
+
+    // Parse through data
+    let aisles = new Set();
+    let tcin_data = [];
+    resData = JSON.parse(JSON.stringify(results, 0, 2));
+    for (let x of resData) {
+        aisles.add(x.product.aisle);
+        tcin_data.push({
+            tcin: String(x.product.tcin),
+            name: String(x.product.title),
+            image: String(x.product.main_image.link),
+            aisle: String(x.product.aisle),
+            price: String(x.product.buybox_winner.price.value)
+        });
+    }
+
+    let store_loc = resData[0].location_info;
+    return { aisles, tcin_data, store_loc };
+};
+
+/**
+ * Gets the user's current tab using chrome.tabs's tabs and query functions
+ * @returns {Object} tab: information from chrome.tabs api of the user's current tab
+ */
+async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    let [tab] = await chrome.tabs.query(queryOptions);
+    return tab;
+}
+
+/**
+ * Gets the user's current Google account information using the chrome.identity API and the getProfileUserInfo function
+ * @returns email: Current Google user's email that is logged into the browser
+ */
+function getCurrentUser() {
+    chrome.identity.getProfileUserInfo({ accountStatus: "ANY" }, function (info) {
+        email = info.email;
+    });
+    return email;
+}
+
+let cur_tab = getCurrentTab();
+
+/**
+ * Upon updating or refreshing the page, it is checked to see if the user is on the page https://www.target.com/cart. If so, stores that page as the tab we want to utilize. Also stores user's email.
+ * @param{Object} tab Object from chrome.tabs api that contains data of the user's tabs
+ */
+chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+    if (tab.url == "https://www.target.com/cart") {
+        cur_tab = tab;
+    }
+
+    chrome.identity.getProfileUserInfo({ accountStatus: "ANY" }, function (info) {
+        email = info.email;
+    });
+});
+
+/**
+ * Function that gets the profile information for the chrome extension popup. Utilizes Google Oauth in order to use the correct authorization token and then get the user information, which we use for the user's name, email, and profile picture.
+ * @param {Object} sendResponse Contains information of the user that is currently logged in
+ */
+async function handleGetProfile(sendResponse) {
+    const authResponse = await chrome.identity.getAuthToken({ interactive: true });
+    const headers = new Headers()
+    headers.append('Authorization', `Bearer ${authResponse.token}`)
+
+    const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers
+    })
+    const user = await response.json();
+    sendResponse(user);
+};
+
+/**
+ * Function utilizing chrome.extension api in order to listen in on when the user clicks the generate path button. 
+ * First gets the user's profile if needed
+ * Then checks if it is a message from the React Popup. If so, runs the contenScript on the current tab
+ * Then waits until the contentScript sends data back. Calls getProductData to use RedCircle to obtain more information from the web scraped data.
+ * Finally sends data to database and to lambda to start path generation.
+ */
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        let item_ids = []
+        let zipcode = "";
+        let store = "";
+        let email = "";
+
+        if (request === "get-user-profile") {
+            handleGetProfile(sendResponse);
+            return true;
+        }
+        else if (request.greeting === "POPUP") {
+            console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+            if (request.greeting)
+                chrome.scripting.executeScript({
+                    files: ['contentScript.js'],
+                    target: { tabId: cur_tab.id }
+                });
+        }
+        else if (Array.isArray(request.greeting)) {
+
+            console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+            cur_tab = sender.tab;
+
+            item_ids = request.greeting;
+
+            store = item_ids[item_ids.length - 1];
+            zipcode = item_ids[item_ids.length - 2];
+            item_ids.splice(item_ids.length - 2, 2);
+
+            for (let i = 0; i &lt; item_ids.length; i++) {
+                item_ids[i] = String(item_ids[i]);
+            }
+
+            getProductData(item_ids, String(store)).then(async (results) => {
+                let aisles = Array.from(results.aisles);
+                let tcin_data = results.tcin_data;
+                let store_loc = results.store_loc;
+                let store_id = store_loc["store_id"]
+
+                email = getCurrentUser();
+
+                const newOrder = {
+                    email: email,
+                    items: tcin_data,
+                    store_id: store_id,
+                };
+
+                const response = await fetch("https://api.bullseye.host/order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", 'Accept': 'application/json' },
+                    body: JSON.stringify(newOrder),
+                });
+                const data = await response.json();
+
+                // send to generation
+                fetch("https://aao7qxqdvncxulcqbjnbog57su0safck.lambda-url.us-east-2.on.aws/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        storeId: store_id,
+                        orderId: data.order_num,
+                        email: email,
+                        aisles: aisles
+                    }),
+                })
+
+                if (request.greeting) sendResponse({ farewell: "goodbye" });
+            });
+        }
+    });
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#getCurrentTab">getCurrentTab</a></li><li><a href="global.html#getCurrentUser">getCurrentUser</a></li><li><a href="global.html#getProductData">getProductData</a></li><li><a href="global.html#handleGetProfile">handleGetProfile</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#message">message</a></li><li><a href="global.html#simulateNetworkRequest">simulateNetworkRequest</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sun May 07 2023 16:14:07 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

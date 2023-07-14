@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "bullseye-backend"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "bullseye_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+opencv-python = "^4.7.0.72"
+matplotlib = "^3.7.0"
+selenium = "^4.8.2"
+numpy = "^1.24.2"
+seaborn = "^0.12.2"
+svgpathtools = "^1.6.0"
+fastapi = "^0.92.0"
+uvicorn = {extras = ["standard"], version = "^0.20.0"}
+sqlalchemy = "^2.0.4"
+psycopg2 = "^2.9.5"
+authlib = "^1.2.0"
+itsdangerous = "^2.1.2"
+httpx = "^0.23.3"
+pyjwt = "^2.6.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "bullseye_backend.main:start"

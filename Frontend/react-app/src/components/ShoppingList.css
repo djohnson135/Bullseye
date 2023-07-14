@@ -1,0 +1,43 @@
+.shopping-list-wrapper {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.shopping-list-wrapper-signIn {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.shopping-list-header-wrapper {
+}
+
+.shopping-list-header {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.shopping-list-bg {
+    width: 90%;
+    height: 80vh;
+    background-color: #ECECEC;
+}
+
+.shopping-list-header > p {
+    font-family: 'Mulish', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.shopping-list-red {
+    color: red;
+}
+
+@media screen and (max-width: 600px) {
+    .shopping-list-header > p {
+        font-size: 23px;
+    }
+}
+

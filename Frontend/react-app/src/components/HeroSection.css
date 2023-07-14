@@ -1,0 +1,337 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000 url('../assets/background_img.png');
+    -webkit-overflow-scrolling: touch;
+}
+
+.bg {
+    height: 620px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    width: 100%;
+}
+
+.hero-red {
+    font-style: normal;
+    font-size: 34px;
+    color: red;
+    background-color: white;
+    padding: 2px;
+}
+
+.bgImg-hero {
+    height: 78vh;
+    background: url(../../public/img/cart.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    width: 100%;
+}
+
+.bgImg-hero2 {
+    height: 78vh;
+    background: url(../../public/img/ex21.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    width: 100%;
+}
+
+/* .bgImg-hero > img {
+    background: url(/img/ex3.jpg);
+    background-size: cover;
+    position: relative;
+    background-repeat: no-repeat;
+} */
+
+.text-hero {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 26px;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    color: black;
+}
+
+.text-hero2 {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    font-size: 26px;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    color: black;
+}
+
+.text-hero h1 {
+    text-align: center;
+    font-family: 'Mulish', sans-serif;
+    font-weight: bold;
+    font-size: 45px;
+    letter-spacing: 0.5px;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.text-hero>p {
+    font-family: 'Mulish', sans-serif;
+    text-align: center;
+    font-weight: 100px;
+    font-size: 32px;
+    font-style: normal;
+    color: #ffffff;
+}
+
+.text-hero2>p {
+    font-family: 'Mulish', sans-serif;
+    text-align: center;
+    font-weight: 100px;
+    font-size: 35px;
+    font-style: normal;
+    padding: 2px;
+    color: white;
+}
+
+.p2 {
+    font-family: 'Mulish', sans-serif;
+    text-align: center;
+    font-weight: 100px;
+    font-size: 29px;
+    padding: 2px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.learnMoreButton-hero {
+    margin-top: 20px;
+    background-color: black;
+    font-size: 12px;
+    color: white;
+    border: black;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 120px;
+    height: 55px;
+    border-radius: 5px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.learnMoreButton-hero:hover {
+    /* background-color: #2EE59D; */
+    transition-duration: 0.3s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    color: red;
+    transform: translateY(-2px);
+}
+
+.learnMoreButton-hero2 {
+    margin-top: 20px;
+    background-color: white;
+    font-size: 12px;
+    color: black;
+    border: black;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 120px;
+    height: 55px;
+    border-radius: 5px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.learnMoreButton-hero2:hover {
+    /* background-color: #2EE59D; */
+    transition-duration: 0.3s;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    color: red;
+    transform: translateY(-2px);
+}
+
+@media screen and (max-width: 600px) {
+    .bgImg-hero {
+        background: url(../../public/img/cart-mobile.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        height: 55vh;
+        width: 100%;
+    }
+
+    .bgImg-hero2 {
+        background: url(../../public/img/ex21.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        height: 55vh;
+        width: 100%;
+    }
+
+    .text-hero {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 26px;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+        color: black;
+    }
+
+    .text-hero>p {
+        text-align: center;
+        font-weight: 100px;
+        font-size: 20px;
+        width: 300px;
+        padding: 2px;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .text-hero2 {
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        font-size: 26px;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+        color: black;
+    }
+
+    .text-hero2>p {
+        font-family: 'Mulish', sans-serif;
+        text-align: center;
+        font-weight: 100px;
+        font-size: 18px;
+        font-style: normal;
+        padding: 2px;
+        color: white;
+    }
+
+    .learnMoreButton-hero {
+        margin-top: 20px;
+        font-size: 9.5px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 99px;
+        height: 44px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .learnMoreButton-hero2 {
+        margin-top: 20px;
+        font-size: 9.5px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 99px;
+        height: 44px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .p2 {
+        font-family: 'Mulish', sans-serif;
+        text-align: center;
+        font-weight: 100px;
+        font-size: 15px;
+        padding: 2px;
+        color: white;
+        margin-bottom: 15px;
+    }
+}
+
+@media screen and (min-width:601px) and (max-width: 960px) {    
+    .bgImg-hero {
+        background: url(../../public/img/cart-mobile.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        height: 55vh;
+        width: 100%;
+    }
+
+    .bgImg-hero2 {
+        background: url(../../public/img/ex21.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        height: 55vh;
+        width: 100%;
+    }
+
+    .text-hero {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 26px;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+        color: black;
+    }
+
+    .text-hero>p {
+        text-align: center;
+        font-weight: 100px;
+        font-size: 30px;
+        width: 100%;
+        padding: 2px;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .text-hero2 {
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        font-size: 26px;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+        color: black;
+    }
+
+    .text-hero2>p {
+        font-family: 'Mulish', sans-serif;
+        text-align: center;
+        font-weight: 100px;
+        font-size: 30px;
+        font-style: normal;
+        padding: 2px;
+        color: white;
+    }
+
+    .learnMoreButton-hero {
+        margin-top: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 134px;
+        height: 62px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .learnMoreButton-hero2 {
+        margin-top: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 134px;
+        height: 62px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .p2 {
+        font-family: 'Mulish', sans-serif;
+        text-align: center;
+        font-weight: 100px;
+        font-size: 15px;
+        padding: 2px;
+        color: white;
+        margin-bottom: 15px;
+    }
+}

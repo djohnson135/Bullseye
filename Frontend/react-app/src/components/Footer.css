@@ -1,0 +1,88 @@
+.footerBg {
+    
+    height: 266px;
+    background-color: black;
+}
+
+.footer-subscription {
+    padding-top: 45px;
+    margin-bottom: 95px;   
+}
+
+.footer-subscription-heading {
+    font-family: 'Mulish', sans-serif;
+    font-size: 23px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;   
+}
+
+.footer-link-heading {
+    color: black;
+    font-weight: 550;
+    font-family: 'Mulish', sans-serif;
+    font-size: 22px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+}
+
+.footer-link-wrapper {
+    display: flex;
+}
+
+.footer-link-items {
+    padding: 15px;
+}
+
+.foooter-logo-font {
+    color: white;
+    font-size: 15px;
+    font-weight: 550;
+    font-family: 'Mulish', sans-serif;
+    margin-right: 8px;
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+    .footerBg {
+        width: 100%;
+        height: 266px;
+        background-color: black;
+    }
+
+    .footer-subscription {
+        padding-top: 45px;
+        margin-bottom: 84px;   
+    }
+
+    .footer-subscription-heading {
+        font-size: 19px;
+    }
+
+    .footer-link-heading {
+        font-size: 16px;
+    }
+
+    .foooter-logo-font {
+        font-size: 13px;
+    }
+}
+
+@media screen and (min-width:601px) and (max-width: 960px) {
+    .footer-subscription-heading {
+        font-size: 19px;
+    }
+
+    .footer-link-heading {
+        font-size: 16px;
+    }
+
+    .foooter-logo-font {
+        font-size: 13px;
+    }
+}

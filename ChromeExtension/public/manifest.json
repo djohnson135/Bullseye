@@ -1,0 +1,41 @@
+{
+  "name": "Bullseye",
+  "version": "1.0.0",
+  "description": "This is an extension to help users make shopping lists and provides optimal routes according to their shopping lists",
+  "manifest_version": 3,
+  "permissions": [
+    "tabs",
+    "scripting",
+    "active tabs",
+    "identity",
+    "identity.email"
+  ],
+  "author": "Dylan Sloan, Dathan Johnson, Zachary Lewis, Reed Billedo, Jun Lee, & Karanja Evans",
+  "icons": {
+    "16": "img/Bullseye.png",
+    "48": "img/Bullseye.png",
+    "128": "img/Bullseye.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Bullseye"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "env": {
+    "webextensions": true
+  },
+  "host_permissions": [
+    "https://www.target.com/cart",
+    "https://aao7qxqdvncxulcqbjnbog57su0safck.lambda-url.us-east-2.on.aws/"
+  ],
+  "externally_connectable": {
+    "matches": ["<all_urls>"]
+  },
+  "oauth2": {
+    "client_id": "348709164296-c2us0it0lqghg3atbgnn5mqn1l3bh3ab.apps.googleusercontent.com",
+    "scopes": ["profile"]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1AdVwSfJ+ELG3V/RELp1GKVELsUIlzaes8yyUI8X+L9p9BkUtJPNLhtaHLpRHNzMZykJC1T7apoKD4zQ/GxP+6QJHDTbJd+g7SyNXEBWCao1uRCgkxNr08FK+lZaV8M+Iof2t0TtR2QAtx+0Dxsr6lc+8b/HQvTnrNtfTXIvXpWG2TnxumEUb9aNttw1Zi0Oz6qF5AQXlxahnRTDi7znLlv3veQI8mh5Tyj1BKUAe93gqE9W3lUAhTRbhVS9fsI68ClktZvFbvDecF+YWItX1WzRRqCzb+JTOadDJ3K8+06E5h7nM4vyumQpui/Cm8jVvubH9SRPxVbAalaxQGFrxwIDAQAB"
+}

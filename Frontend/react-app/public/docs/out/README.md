@@ -1,0 +1,7 @@
+Chrome Extension Documentation:
+
+This is an extension to help users navigate through Target stores with the most optimal path for all of their items, allowing the user to be both cost-effective and time efficient. We aim to help users make smarter financial decisions and smarter navigation decisions while in the store. Our goal is to help users get in and out of their local store as quickly as possible.
+
+This outlines the various functions that were utilized in creating the Chrome Extension portion of this project. At a high level, the extension is composed of three main files: background.js, contentScript.js, and App.js. App.js is used to create and design the extension popup that users see. When they click the 'Generate Path' button, the background.js script will be called. This file begins running in the background once the extension is downloaded. It keeps track of the various tabs that are being used, calls the RedCircle API, and controls when the content script will be utilized. Once background.js is able to determine the user is on the Target Cart page and the user clicks the Generate Path button, the content script will be called to interact with and obtain data from the Target HTML page. This data is then sent back to background.js, where more item information is obtained through the RedCircle API. Once all of this data is obtained, it is all sent to our backend consisting of our database and AWS Lambda where the path generation begins.
+
+More depth for all of this can be viewed by inspecting the individual functions.
